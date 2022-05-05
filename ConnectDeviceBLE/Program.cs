@@ -51,7 +51,7 @@ namespace ConnectDeviceBLE
             deviceWatcher.Removed += DeviceWatcher_Removed;
 
             // EnumerationCompleted and Stopped are optional to implement.
-            deviceWatcher.EnumerationCompleted += DeviceWatcher_EnumerationCompleted;
+            deviceWatcher.EnumerationCompleted += DeviceWatcher_EnumerationCompleted; 
             deviceWatcher.Stopped += DeviceWatcher_Stopped;
 
             // Start the watcher.
