@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32413.511
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConnectDeviceBLE", "ConnectDeviceBLE\ConnectDeviceBLE.csproj", "{E11F1F87-FDE8-4223-8B91-0FA1543B77DA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E11F1F87-FDE8-4223-8B91-0FA1543B77DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E11F1F87-FDE8-4223-8B91-0FA1543B77DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E11F1F87-FDE8-4223-8B91-0FA1543B77DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E11F1F87-FDE8-4223-8B91-0FA1543B77DA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {709F259B-CBFA-4C32-B455-5E70A248F72D}
+	EndGlobalSection
+EndGlobal

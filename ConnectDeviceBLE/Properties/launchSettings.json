@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ConnectDeviceBLE": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}
