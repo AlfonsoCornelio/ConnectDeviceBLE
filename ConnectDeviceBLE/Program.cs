@@ -80,8 +80,6 @@ namespace ConnectDeviceBLE
                         foreach (var service in services)
                         {
                             Console.WriteLine("Servicio Uuid:" + service.Uuid);
-
-
                             GattCharacteristicsResult resultC = await service.GetCharacteristicsAsync();
 
                             //foreach (var characteristic in characteristics)
@@ -95,43 +93,12 @@ namespace ConnectDeviceBLE
 
                                 Console.WriteLine("\t\tCaracteristica Uuid:" + characteristic.Uuid.ToString());
 
-                                //string characteristicUuid = "" + characteristic.Uuid.ToString();
-                                //if (characteristicUuid.Equals(HEART_RATE_CHARACTERISTIC_ID))
-                                //{
-                                //    Console.WriteLine("\t\tEncontrada la caracteristica Heart Rate");
-                                //}
-
-
 
                                 GattReadResult resultcharacteristicValue = await characteristic.ReadValueAsync();
 
                                 if (resultcharacteristicValue.Status == GattCommunicationStatus.Success)
                                 {
-                                    //var reader = DataReader.FromBuffer(resultcharacteristicValue.Value);
-                                    //// Utilize the data as needed
 
-                                    //var receivedStrings = "";
-
-                                    //// Keep reading until we consume the complete stream.
-                                    //while (reader.UnconsumedBufferLength > 0)
-                                    //{
-                                    //    // Note that the call to readString requires a length of "code units" 
-                                    //    // to read. This is the reason each string is preceded by its length 
-                                    //    // when "on the wire".
-                                    //    uint bytesToRead = reader.UnconsumedBufferLength;
-                                    //    try
-                                    //    {
-                                    //        receivedStrings += reader.ReadString(bytesToRead);
-                                    //        Console.WriteLine("\t\t\tLeyendo el valor de la caracteristica: " + receivedStrings);
-                                    //    }
-                                    //    catch (Exception)
-                                    //    {
-                                    //        byte[] input = new byte[reader.UnconsumedBufferLength];
-                                    //        reader.ReadBytes(input);
-                                    //        Console.WriteLine("\t\t\tLeyendo el valor de la caracteristica: " + input);
-
-                                    //    }
-                                    //}
 
                                     if (properties.HasFlag(GattCharacteristicProperties.Read))
                                     {
@@ -142,8 +109,6 @@ namespace ConnectDeviceBLE
                                         //if (resultcharacteristicValue.Status == GattCommunicationStatus.Success)
                                         //{
                                         var reader = DataReader.FromBuffer(resultcharacteristicValue.Value);
-                                        // Utilize the data as needed
-
                                         var receivedStrings = "";
 
                                         // Keep reading until we consume the complete stream.
@@ -162,8 +127,13 @@ namespace ConnectDeviceBLE
                                             {
                                                 byte[] input = new byte[reader.UnconsumedBufferLength];
                                                 reader.ReadBytes(input);
-                                                Console.WriteLine("\t\t\t\tLeyendo el valor de la caracteristica: " + input);
 
+                                                //reader.ReadBytes(input);
+                                                for (int iValor = 0; iValor < input.Length; iValor++)
+                                                {
+                                                    string valor = input.GetValue(iValor).ToString();
+                                                    Console.WriteLine("\t\t\t\tLeyendo el valor de la caracteristica: " + valor);
+                                                }
                                             }
                                         }
                                         //}
@@ -175,18 +145,60 @@ namespace ConnectDeviceBLE
                                         // This characteristic supports writing to it.
                                         Console.WriteLine("\t\t\tEsta caracteristica admite la escritura");
                                     }
-                                    if (properties.HasFlag(GattCharacteristicProperties.Notify))
-                                    {
-                                        // This characteristic supports subscribing to notifications.
-                                        Console.WriteLine("\t\t\tEsta caracteristica soporta las notificaciones");
-                        //                GattCommunicationStatus status = await characteristic.WriteClientCharacteristicConfigurationDescriptorAsync(
-                        //GattClientCharacteristicConfigurationDescriptorValue.Notify);
-                        //                if (status == GattCommunicationStatus.Success)
-                        //                {
-                        //                    // Server has been informed of clients interest.
-                        //                    characteristic.ValueChanged += Characteristic_ValueChanged;
-                        //                }
-                                    }
+
+                                    string characteristicUuid = "" + characteristic.Uuid.ToString();
+                                    //if (characteristicUuid.Equals(HEART_RATE_CHARACTERISTIC_ID))
+                                    //{
+
+                                        if (properties.HasFlag(GattCharacteristicProperties.Notify))
+                                        {
+                                            // This characteristic supports subscribing to notifications.
+                                            Console.WriteLine("\t\t\tEsta caracteristica soporta las notificaciones");
+                                            GattCommunicationStatus status = await characteristic.WriteClientCharacteristicConfigurationDescriptorAsync(
+                                                GattClientCharacteristicConfigurationDescriptorValue.Notify);
+                                            if (status == GattCommunicationStatus.Success)
+                                            {
+                                                // Server has been informed of clients interest.
+                                                characteristic.ValueChanged += Characteristic_ValueChanged;
+
+                                                var reader = DataReader.FromBuffer(resultcharacteristicValue.Value);
+
+                                                //var flags = reader.ReadByte();
+                                                //var value = reader.ReadByte();
+                                                //Console.WriteLine($"{flags} - {value}");
+
+                                                var receivedStrings = "";
+
+                                                ////Keep reading until we consume the complete stream.
+                                                while (reader.UnconsumedBufferLength > 0)
+                                                {
+                                                    //Note that the call to readString requires a length of "code units"
+                                                    // to read. This is the reason each string is preceded by its length
+                                                    // when "on the wire".
+
+                                                    uint bytesToRead = reader.UnconsumedBufferLength;
+                                                    try
+                                                    {
+                                                        receivedStrings += reader.ReadString(bytesToRead);
+                                                        Console.WriteLine("\t\t\t\tLeyendo el valor de la caracteristica Modificado: " + receivedStrings);
+                                                    }
+                                                    catch (Exception)
+                                                    {
+                                                        byte[] input = new byte[reader.UnconsumedBufferLength];
+                                                        reader.ReadBytes(input);
+
+                                                        //reader.ReadBytes(input);
+                                                        for (int iValor = 0; iValor < input.Length ; iValor++)
+                                                        {
+                                                            string valor = input.GetValue(iValor).ToString();
+                                                            Console.WriteLine("\t\t\t\tLeyendo el valor de la caracteristica Modificado: " + valor);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        //Console.WriteLine("\t\tEncontrada la caracteristica Heart Rate");
+                                    //}
                                 }
                             }
                         }
@@ -203,7 +215,6 @@ namespace ConnectDeviceBLE
         private static void Characteristic_ValueChanged(GattCharacteristic sender, GattValueChangedEventArgs args)
         {
             var reader = DataReader.FromBuffer(args.CharacteristicValue);
-            //throw new NotImplementedException();
         }
 
         private static void DeviceWatcher_Stopped(DeviceWatcher sender, object args)
